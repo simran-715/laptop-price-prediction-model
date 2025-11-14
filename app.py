@@ -35,20 +35,24 @@ gpu=st.selectbox('CPU',df['Gpu brand'].unique())
 os=st.selectbox('OS',df['os'].unique())
 
 if st.button('Predict Price'):
-    ppi=None
-    if touchscreen=='Yes':
-        touchscreen=1
+    # Validate screen_size input
+    if screen_size <= 0:
+        st.error('Please enter a valid screen size')
     else:
-        touchscreen=0
-    if ips=='Yes':
-        ips=1
-    else:
-        ips=0
+        ppi=None
+        if touchscreen=='Yes':
+            touchscreen=1
+        else:
+            touchscreen=0
+        if ips=='Yes':
+            ips=1
+        else:
+            ips=0
 
-    x_res=int(resolution.split('x')[0])
-    y_res=int(resolution.split('x')[1])
-    ppi=((x_res**2)+(y_res**2))**0.5/screen_size
-    query=np.array([company,type,ram,weight,touchscreen,ips,ppi,cpu,hdd,ssd,gpu,os])
-    
-    query=query.reshape(1,12)
-    st.title(int(np.exp(pipe.predict(query)[0])))
+        x_res=int(resolution.split('x')[0])
+        y_res=int(resolution.split('x')[1])
+        ppi=((x_res**2)+(y_res**2))**0.5/screen_size
+        query=np.array([company,type,ram,weight,touchscreen,ips,ppi,cpu,hdd,ssd,gpu,os])
+        
+        query=query.reshape(1,12)
+        st.title(int(np.exp(pipe.predict(query)[0])))
